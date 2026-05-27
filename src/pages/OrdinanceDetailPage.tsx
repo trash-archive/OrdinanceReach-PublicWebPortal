@@ -3,11 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Calendar, User, Building2, Bookmark, Share2,
   Download, Flag, ChevronDown, ChevronUp, Copy, Check,
-  FileText, AlertCircle, ExternalLink,
+  FileText, AlertCircle, ExternalLink, Printer,
 } from 'lucide-react';
 import { ordinances } from '../data/ordinances';
 import { StatusBadge, CategoryChip, AIPill, Button } from '../components/ui/Badges';
 import { OrdinanceCard } from '../components/ordinance/OrdinanceCard';
+import { AIChatbot } from '../components/ui/AIChatbot';
 
 // Share modal
 const ShareModal: React.FC<{ open: boolean; onClose: () => void; title: string }> = ({
@@ -256,6 +257,8 @@ export const OrdinanceDetailPage: React.FC = () => {
     <>
       <ShareModal open={shareOpen} onClose={() => setShareOpen(false)} title={ordinance.title} />
       <ReportModal open={reportOpen} onClose={() => setReportOpen(false)} />
+      {/* Per-ordinance AI chatbot — context-aware for this specific ordinance */}
+      <AIChatbot ordinance={ordinance} theme="navy" />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '1.5rem 2rem 3rem' }}>
         {/* Breadcrumb */}
@@ -347,6 +350,14 @@ export const OrdinanceDetailPage: React.FC = () => {
                   icon={<Download size={14} />}
                 >
                   Download PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  size="md"
+                  icon={<Printer size={14} />}
+                  onClick={() => window.print()}
+                >
+                  Print
                 </Button>
                 <Button
                   variant="outline"

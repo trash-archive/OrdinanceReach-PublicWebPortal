@@ -1,54 +1,50 @@
 import React from 'react';
 import type { OrdinanceStatus } from '../../types';
 
-// ── Badge ────────────────────────────────────────────────────────────────────
-interface BadgeProps {
-  status: OrdinanceStatus;
-  className?: string;
-}
-
-const statusMap: Record<OrdinanceStatus, { label: string; style: React.CSSProperties }> = {
+// ── StatusBadge ───────────────────────────────────────────────────────────────
+const statusConfig: Record<
+  OrdinanceStatus,
+  { bg: string; text: string; border: string; dot: string; label: string }
+> = {
   active: {
+    bg: 'var(--active-bg, #EDFAF3)',
+    text: 'var(--active-text, #166534)',
+    border: 'var(--active-border, #BBF7D0)',
+    dot: '#22C55E',
     label: 'Active',
-    style: {
-      background: 'var(--active-bg)',
-      color: 'var(--active-text)',
-      border: '0.5px solid var(--active-border)',
-    },
   },
   amended: {
+    bg: 'var(--amended-bg, #FFFBEB)',
+    text: 'var(--amended-text, #92400E)',
+    border: 'var(--amended-border, #FDE68A)',
+    dot: '#F59E0B',
     label: 'Amended',
-    style: {
-      background: 'var(--amended-bg)',
-      color: 'var(--amended-text)',
-      border: '0.5px solid var(--amended-border)',
-    },
   },
   repealed: {
+    bg: 'var(--repealed-bg, #FFF1F2)',
+    text: 'var(--repealed-text, #9F1239)',
+    border: 'var(--repealed-border, #FECDD3)',
+    dot: '#F43F5E',
     label: 'Repealed',
-    style: {
-      background: 'var(--repealed-bg)',
-      color: 'var(--repealed-text)',
-      border: '0.5px solid var(--repealed-border)',
-    },
   },
 };
 
-export const StatusBadge: React.FC<BadgeProps> = ({ status, className = '' }) => {
-  const { label, style } = statusMap[status];
+export const StatusBadge: React.FC<{ status: OrdinanceStatus }> = ({ status }) => {
+  const cfg = statusConfig[status];
   return (
     <span
-      className={className}
       style={{
-        ...style,
         display: 'inline-flex',
         alignItems: 'center',
         gap: 4,
-        fontSize: 11,
-        fontWeight: 500,
-        padding: '2px 9px',
+        fontSize: 10,
+        fontWeight: 600,
+        letterSpacing: '0.4px',
+        padding: '2px 8px',
         borderRadius: 99,
-        letterSpacing: '0.2px',
+        background: cfg.bg,
+        color: cfg.text,
+        border: `0.5px solid ${cfg.border}`,
         whiteSpace: 'nowrap',
       }}
     >
@@ -57,31 +53,31 @@ export const StatusBadge: React.FC<BadgeProps> = ({ status, className = '' }) =>
           width: 5,
           height: 5,
           borderRadius: '50%',
-          background: 'currentColor',
-          display: 'inline-block',
-          opacity: 0.7,
+          background: cfg.dot,
+          flexShrink: 0,
         }}
       />
-      {label}
+      {cfg.label}
     </span>
   );
 };
 
-// ── Category chip ─────────────────────────────────────────────────────────────
-interface ChipProps {
-  label: string;
-  size?: 'sm' | 'md';
-}
-export const CategoryChip: React.FC<ChipProps> = ({ label, size = 'sm' }) => (
+// ── CategoryChip ──────────────────────────────────────────────────────────────
+export const CategoryChip: React.FC<{ label: string; size?: 'sm' | 'md' }> = ({
+  label,
+  size = 'sm',
+}) => (
   <span
     style={{
-      display: 'inline-block',
-      fontSize: size === 'sm' ? 11 : 12,
-      padding: size === 'sm' ? '2px 9px' : '3px 11px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      fontSize: size === 'md' ? 11 : 10,
+      fontWeight: 500,
+      padding: size === 'md' ? '3px 10px' : '2px 8px',
       borderRadius: 99,
-      background: 'var(--surface-raised)',
-      color: 'var(--text-secondary)',
-      border: '0.5px solid var(--border)',
+      background: 'var(--brand-light, #EBF4FF)',
+      color: 'var(--brand, #185FA5)',
+      border: '0.5px solid var(--brand-border, #BFDBFE)',
       whiteSpace: 'nowrap',
     }}
   >
@@ -89,7 +85,7 @@ export const CategoryChip: React.FC<ChipProps> = ({ label, size = 'sm' }) => (
   </span>
 );
 
-// ── AI pill ───────────────────────────────────────────────────────────────────
+// ── AIPill ────────────────────────────────────────────────────────────────────
 export const AIPill: React.FC = () => (
   <span
     style={{
@@ -98,69 +94,83 @@ export const AIPill: React.FC = () => (
       gap: 4,
       fontSize: 10,
       fontWeight: 600,
-      padding: '3px 9px',
+      letterSpacing: '0.5px',
+      padding: '2px 8px',
       borderRadius: 99,
-      background: 'var(--brand-light)',
-      color: 'var(--brand)',
-      border: '0.5px solid var(--brand-border)',
-      letterSpacing: '0.4px',
+      background: 'linear-gradient(135deg, #EBF4FF 0%, #F0EBFF 100%)',
+      color: 'var(--brand, #185FA5)',
+      border: '0.5px solid var(--brand-border, #BFDBFE)',
       whiteSpace: 'nowrap',
+      flexShrink: 0,
     }}
   >
-    ✦ AI SUMMARY
+    ✦ AI Summary
   </span>
 );
 
 // ── Button ────────────────────────────────────────────────────────────────────
-interface BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   variant?: 'primary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md';
+  size?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  style?: React.CSSProperties;
+  disabled?: boolean;
 }
 
-export const Button: React.FC<BtnProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   variant = 'outline',
-  size = 'sm',
+  size = 'md',
   icon,
+  onClick,
   children,
   style,
-  ...rest
+  disabled,
 }) => {
-  const base: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 6,
-    fontFamily: 'inherit',
-    fontWeight: 500,
-    cursor: 'pointer',
-    borderRadius: 'var(--radius-md)',
-    transition: 'background 0.14s, border-color 0.14s, color 0.14s, box-shadow 0.14s',
-    whiteSpace: 'nowrap',
-    fontSize: size === 'sm' ? 12 : 13,
-    padding: size === 'sm' ? '6px 13px' : '8px 18px',
+  const sizeStyles: Record<string, React.CSSProperties> = {
+    sm: { fontSize: 12, padding: '5px 11px', borderRadius: 8 },
+    md: { fontSize: 13, padding: '7px 16px', borderRadius: 10 },
+    lg: { fontSize: 14, padding: '10px 22px', borderRadius: 12 },
   };
 
-  const variants: Record<string, React.CSSProperties> = {
+  const variantStyles: Record<string, React.CSSProperties> = {
     primary: {
-      background: 'var(--brand)',
+      background: 'var(--brand, #185FA5)',
       color: '#fff',
       border: 'none',
     },
     outline: {
-      background: 'var(--surface)',
+      background: 'none',
       color: 'var(--text-secondary)',
       border: '0.5px solid var(--border-strong)',
     },
     ghost: {
-      background: 'transparent',
-      color: 'var(--text-secondary)',
-      border: '0.5px solid transparent',
+      background: 'none',
+      color: 'var(--text-tertiary)',
+      border: 'none',
     },
   };
 
   return (
-    <button style={{ ...base, ...variants[variant], ...style }} {...rest}>
-      {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        fontFamily: 'inherit',
+        fontWeight: 500,
+        cursor: disabled ? 'default' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+        transition: 'all 0.12s',
+        ...sizeStyles[size],
+        ...variantStyles[variant],
+        ...style,
+      }}
+    >
+      {icon}
       {children}
     </button>
   );

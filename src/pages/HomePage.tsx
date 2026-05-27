@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Search, ArrowRight, Heart, Car, Leaf, Building2,
   Shield, GraduationCap, Home, Users, TrendingUp, BookOpen, ChevronRight,
+  FileText, Bell, Bot,
 } from 'lucide-react';
 import { ordinances, categoryStats } from '../data/ordinances';
 import { OrdinanceCard } from '../components/ordinance/OrdinanceCard';
@@ -484,6 +485,131 @@ export const HomePage: React.FC = () => {
           >
             Explore ordinances
           </button>
+        </div>
+
+        {/* ── How it works ──────────────────────────────────────────── */}
+        <div style={{ marginTop: '3.5rem' }}>
+          <div
+            style={{
+              display: 'flex', justifyContent: 'space-between',
+              alignItems: 'baseline', marginBottom: '1.25rem',
+            }}
+          >
+            <div>
+              <h2
+                style={{
+                  fontFamily: 'Playfair Display, serif',
+                  fontSize: 22, fontWeight: 600,
+                  color: 'var(--text-primary)', marginBottom: 2,
+                }}
+              >
+                How it works
+              </h2>
+              <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
+                The journey of a Cebu City ordinance from the Council chamber to your screen.
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/about')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 5,
+                fontSize: 13, color: 'var(--brand)',
+                background: 'none', border: 'none',
+                cursor: 'pointer', fontFamily: 'inherit', fontWeight: 500,
+              }}
+            >
+              Learn more <ChevronRight size={14} />
+            </button>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+              gap: '1rem',
+            }}
+          >
+            {[
+              {
+                number: '01',
+                icon: <FileText size={18} />,
+                title: 'Ordinance is enacted',
+                description:
+                  'The Sangguniang Panlungsod passes an ordinance. It becomes effective after the required 15-day publication period.',
+              },
+              {
+                number: '02',
+                icon: <Bell size={18} />,
+                title: 'Offices are notified',
+                description:
+                  'Implementing offices receive multi-channel notifications with the ordinance details and compliance deadlines.',
+              },
+              {
+                number: '03',
+                icon: <Search size={18} />,
+                title: 'Published on the portal',
+                description:
+                  'The ordinance is added here with an AI-generated plain-language summary and becomes immediately searchable.',
+              },
+              {
+                number: '04',
+                icon: <Bot size={18} />,
+                title: 'Citizens can ask questions',
+                description:
+                  'Residents can search, browse, and ask the AI assistant questions about any ordinance in plain language.',
+              },
+            ].map((step, i) => (
+              <div
+                key={step.number}
+                className="animate-fade-in"
+                style={{
+                  animationDelay: `${i * 0.08}s`,
+                  background: 'var(--surface)',
+                  border: '0.5px solid var(--border)',
+                  borderRadius: 'var(--radius-xl)',
+                  padding: '1.25rem',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Large background number */}
+                <div
+                  aria-hidden
+                  style={{
+                    position: 'absolute', top: -10, right: -6,
+                    fontFamily: 'Playfair Display, serif',
+                    fontSize: 68, fontWeight: 700,
+                    color: 'var(--border)', lineHeight: 1,
+                    userSelect: 'none', pointerEvents: 'none',
+                  }}
+                >
+                  {step.number}
+                </div>
+                <div
+                  style={{
+                    width: 36, height: 36, borderRadius: 10,
+                    background: 'var(--brand-light)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'var(--brand)', marginBottom: 12,
+                  }}
+                >
+                  {step.icon}
+                </div>
+                <h3
+                  style={{
+                    fontSize: 13, fontWeight: 600,
+                    color: 'var(--text-primary)', marginBottom: 6,
+                    fontFamily: 'Playfair Display, serif',
+                  }}
+                >
+                  {step.title}
+                </h3>
+                <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.65 }}>
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>
